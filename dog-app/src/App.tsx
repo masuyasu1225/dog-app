@@ -8,36 +8,57 @@ type DogResponse = {
 
 function App() {
   const [dogImage, setDogImage] = useState<string | null>(null);
-  const [feed, setFeed] = useState(10); // feed stateを追加
+  const [feed, setFeed] = useState(20);
+  const [timer, setTimer] = useState(10);
 
-  // APIから犬の画像を取得する関数
   const fetchDogImage = () => {
     fetch("https://dog.ceo/api/breeds/image/random")
       .then((response) => response.json())
       .then((data: DogResponse) => {
         setDogImage(data.message);
-        setFeed(feed - 1); // feedを1つ減らす
+        if (feed > 0) {
+          setFeed(feed - 1);
+        }
       })
       .catch((error) => console.log("Error:", error));
   };
 
-  // コンポーネントがマウントされたときに初めて画像を取得
   useEffect(fetchDogImage, []);
 
-  // 画像がまだ読み込まれていない場合
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setFeed((prevFeed) => (prevFeed < 20 ? prevFeed + 1 : prevFeed));
+      setTimer(10); // feedを増やした後にtimerをリセット
+    }, 10000);
+
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
+
+  // 1秒ごとにtimerを減らす
+  useEffect(() => {
+    const countdownId = setInterval(() => {
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+    }, 1000);
+
+    return () => {
+      clearInterval(countdownId);
+    };
+  }, []);
+
   if (dogImage === null) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="dog">
+    <div>
       <h1>Random Dog Image</h1>
       <img className="dog-image" src={dogImage} alt="A random dog" />
-      <p>Feed: {feed}</p> {/* feedの値を表示 */}
+      <p>Feed: {feed}</p>
+      <p>Timer: {timer} seconds</p> {/* timerの値を表示 */}
       <button onClick={fetchDogImage} disabled={feed <= 0}>
-        {" "}
-        {/* feedが0のときボタンを無効化 */}
-        Dog
+        Get new dog
       </button>
     </div>
   );
