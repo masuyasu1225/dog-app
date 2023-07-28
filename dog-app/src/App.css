@@ -40,3 +40,9 @@
 .read-the-docs {
   color: #888;
 }
+
+.dog-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
