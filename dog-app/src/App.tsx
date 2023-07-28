@@ -7,12 +7,16 @@ type DogResponse = {
 
 function App() {
   const [dogImage, setDogImage] = useState<string | null>(null);
+  const [feed, setFeed] = useState(10); // feed stateを追加
 
   // APIから犬の画像を取得する関数
   const fetchDogImage = () => {
     fetch("https://dog.ceo/api/breeds/image/random")
       .then((response) => response.json())
-      .then((data: DogResponse) => setDogImage(data.message))
+      .then((data: DogResponse) => {
+        setDogImage(data.message);
+        setFeed(feed - 1); // feedを1つ減らす
+      })
       .catch((error) => console.log("Error:", error));
   };
 
@@ -27,8 +31,13 @@ function App() {
   return (
     <div>
       <h1>Random Dog Image</h1>
-      <img src={dogImage} alt="A random dog" />
-      <button onClick={fetchDogImage}>Dog</button>
+      <img className="dog-image" src={dogImage} alt="A random dog" />
+      <p>Feed: {feed}</p> {/* feedの値を表示 */}
+      <button onClick={fetchDogImage} disabled={feed <= 0}>
+        {" "}
+        {/* feedが0のときボタンを無効化 */}
+        Dog
+      </button>
     </div>
   );
 }
