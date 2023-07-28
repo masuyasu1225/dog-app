@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./App.css";
 
 type DogResponse = {
   message: string;
@@ -29,7 +30,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="dog">
       <h1>Random Dog Image</h1>
       <img className="dog-image" src={dogImage} alt="A random dog" />
       <p>Feed: {feed}</p> {/* feedの値を表示 */}
