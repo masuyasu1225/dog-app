@@ -10,6 +10,7 @@ function App() {
   const [dogImage, setDogImage] = useState<string | null>(null);
   const [feed, setFeed] = useState(20);
   const [timer, setTimer] = useState(10);
+  const maxFeed = 20;
 
   const fetchDogImage = () => {
     fetch("https://dog.ceo/api/breeds/image/random")
@@ -55,7 +56,9 @@ function App() {
     <div>
       <h1>Random Dog Image</h1>
       <img className="dog-image" src={dogImage} alt="A random dog" />
-      <p>Feed: {feed}</p>
+      <p>
+        Feed: {feed}/{maxFeed}
+      </p>
       <p>Timer: {timer} seconds</p> {/* timerの値を表示 */}
       <button onClick={fetchDogImage} disabled={feed <= 0}>
         Get new dog
