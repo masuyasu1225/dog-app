@@ -10,7 +10,7 @@ function App() {
   const [dogImage, setDogImage] = useState<string | null>(null);
   const [feed, setFeed] = useState(20);
   const [timer, setTimer] = useState(10);
-  const maxFeed = 20;
+  const maxFeed: number = 20;
 
   const fetchDogImage = () => {
     fetch("https://dog.ceo/api/breeds/image/random")
