@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-
-type DogResponse = {
-  message: string;
-  status: string;
-};
+import { DogResponse } from "./types";
+import { db } from "./firebase";
+import { collection, doc, addDoc, serverTimestamp } from "firebase/firestore";
 
 function App() {
   const [dogImage, setDogImage] = useState<string | null>(null);
@@ -20,6 +18,15 @@ function App() {
         if (feed > 0) {
           setFeed(feed - 1);
         }
+
+        // 画像のURLをFirestoreに保存
+        const usersCollection = collection(db, "users");
+        const userDoc = doc(usersCollection, "uid");
+        const dogImagesCollection = collection(userDoc, "dogImages");
+        addDoc(dogImagesCollection, {
+          url: data.message,
+          timestamp: serverTimestamp(),
+        });
       })
       .catch((error) => console.log("Error:", error));
   };
