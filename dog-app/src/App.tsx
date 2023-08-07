@@ -20,7 +20,7 @@ function App() {
         }
 
         // 画像のURLをFirestoreに保存
-        const usersCollection = collection(db, "users");
+        const usersCollection = collection(db, "dogs");
         const userDoc = doc(usersCollection, "uid");
         const dogImagesCollection = collection(userDoc, "dogImages");
         addDoc(dogImagesCollection, {
