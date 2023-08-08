@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DogResponse } from "../../types";
-import { db, auth, provider, signInWithPopup } from "../../firebase";
+import { db, auth, onAuthStateChanged } from "../../firebase";
+import { User } from "firebase/auth";
 import { collection, doc, addDoc, serverTimestamp } from "firebase/firestore";
 import "./GetNewDog.css";
 
@@ -8,7 +9,17 @@ function GetNewDog() {
   const [dogImage, setDogImage] = useState<string | null>(null);
   const [feed, setFeed] = useState(20);
   const [timer, setTimer] = useState(10);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const maxFeed: number = 20;
+
+  useEffect(() => {
+    // ユーザーのログイン状態の変更を監視
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const fetchDogImage = () => {
     fetch("https://dog.ceo/api/breeds/image/random")
@@ -19,14 +30,16 @@ function GetNewDog() {
           setFeed(feed - 1);
         }
 
-        // 画像のURLをFirestoreに保存
-        const usersCollection = collection(db, "dogs");
-        const userDoc = doc(usersCollection, "uid");
-        const dogImagesCollection = collection(userDoc, "dogImages");
-        addDoc(dogImagesCollection, {
-          url: data.message,
-          timestamp: serverTimestamp(),
-        });
+        // ユーザーがログインしている場合のみ、画像のURLをFirestoreに保存
+        if (currentUser) {
+          const usersCollection = collection(db, "users");
+          const userDoc = doc(usersCollection, currentUser.uid);
+          const dogImagesCollection = collection(userDoc, "dogImages");
+          addDoc(dogImagesCollection, {
+            url: data.message,
+            timestamp: serverTimestamp(),
+          });
+        }
       })
       .catch((error) => console.log("Error:", error));
   };
