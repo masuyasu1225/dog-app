@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../../firebase";
 
-function SignInWithGoogle() {
+function Login() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -20,4 +20,4 @@ function SignInWithGoogle() {
   return <button onClick={handleLogin}>Sign in with Google</button>;
 }
 
-export default SignInWithGoogle;
+export default Login;
