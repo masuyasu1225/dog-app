@@ -4,6 +4,7 @@ import { db, auth, onAuthStateChanged } from "../../firebase";
 import { User } from "firebase/auth";
 import { collection, doc, addDoc, serverTimestamp } from "firebase/firestore";
 import "./GetNewDog.css";
+import Logout from "../logout/Logout";
 
 function GetNewDog() {
   const [dogImage, setDogImage] = useState<string | null>(null);
@@ -83,6 +84,7 @@ function GetNewDog() {
       <button onClick={fetchDogImage} disabled={feed <= 0}>
         Get new dog
       </button>
+      <Logout />
     </div>
   );
 }
