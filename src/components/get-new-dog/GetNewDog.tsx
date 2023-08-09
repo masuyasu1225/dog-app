@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DogResponse } from "../../types";
 import { db, auth, onAuthStateChanged } from "../../firebase";
 import { User } from "firebase/auth";

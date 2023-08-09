@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import GetNewDog from "./components/get-new-dog/GetNewDog";
-import SignInWithGoogle from "./components/sign-in/SignInWithGoogle";
+import Login from "./components/login/Login";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/get-new-dog" element={<GetNewDog />}></Route>
-        <Route path="/login" element={<SignInWithGoogle />}></Route>
+        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </Router>
   );
