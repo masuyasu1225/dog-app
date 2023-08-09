@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import GetNewDog from "./components/get-new-dog/GetNewDog";
 import Login from "./components/login/Login";
+import AllMyDogs from "./components/all-my-dogs/AllMyDogs";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/get-new-dog" element={<GetNewDog />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/all-my-dogs" element={<AllMyDogs />}></Route>
       </Routes>
     </Router>
   );
