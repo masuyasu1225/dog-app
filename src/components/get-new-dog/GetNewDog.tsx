@@ -6,9 +6,10 @@ import { collection, doc, addDoc, serverTimestamp } from "firebase/firestore";
 import "./GetNewDog.css";
 import Logout from "../logout/Logout";
 import { Link } from "react-router-dom";
+import doghouse from "../picture/doghouse.png"; // 画像をimport
 
 function GetNewDog() {
-  const [dogImage, setDogImage] = useState<string | null>(null);
+  const [dogImage, setDogImage] = useState<string | null>(doghouse);
   const [feed, setFeed] = useState(20);
   const [timer, setTimer] = useState(10);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -45,8 +46,6 @@ function GetNewDog() {
       })
       .catch((error) => console.log("Error:", error));
   };
-
-  useEffect(fetchDogImage, []);
 
   useEffect(() => {
     const timerId = setInterval(() => {
