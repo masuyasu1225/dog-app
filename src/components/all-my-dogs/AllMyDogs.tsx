@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { auth, db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import "./AllMyDogs.css";
 
 function AllMyDogs() {
   const [dogImages, setDogImages] = useState<string[]>([]);
@@ -36,7 +37,7 @@ function AllMyDogs() {
     <div>
       <h1>My Dogs</h1>
       {dogImages.map((image, index) => (
-        <img key={index} src={image} alt="My Dog" />
+        <img className="my-dog" key={index} src={image} alt="My Dog" />
       ))}
     </div>
   );
