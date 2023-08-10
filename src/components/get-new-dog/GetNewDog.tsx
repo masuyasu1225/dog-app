@@ -5,6 +5,7 @@ import { User } from "firebase/auth";
 import { collection, doc, addDoc, serverTimestamp } from "firebase/firestore";
 import "./GetNewDog.css";
 import Logout from "../logout/Logout";
+import { Link } from "react-router-dom";
 
 function GetNewDog() {
   const [dogImage, setDogImage] = useState<string | null>(null);
@@ -85,6 +86,9 @@ function GetNewDog() {
         Get new dog
       </button>
       <Logout />
+      <Link to="/all-my-dogs">
+        <button>View All My Dogs</button>
+      </Link>
     </div>
   );
 }
