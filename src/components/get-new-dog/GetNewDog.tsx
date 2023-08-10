@@ -81,9 +81,9 @@ function GetNewDog() {
       <p>
         Feed: {feed}/{maxFeed}
       </p>
-      <p>Timer: {timer} seconds</p> {/* timerの値を表示 */}
+      <p>Timer: {timer} Seconds</p> {/* timerの値を表示 */}
       <button onClick={fetchDogImage} disabled={feed <= 0}>
-        Get new dog
+        Get New Dog
       </button>
       <Logout />
       <Link to="/all-my-dogs">
