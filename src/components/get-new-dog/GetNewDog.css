@@ -6,7 +6,8 @@
 }
 
 .dog-image {
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
+  width: 100%; /* 画像の幅を親要素の100%に設定 */
+  max-width: 350px; /* 画像の最大幅を300pxに設定 */
+  height: 350px;
+  object-fit: contain; /* 画像がつぶれないようにアスペクト比を保持 */
 }
