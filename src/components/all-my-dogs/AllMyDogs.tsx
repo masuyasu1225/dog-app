@@ -3,6 +3,7 @@ import { auth, db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import "./AllMyDogs.css";
+import { Link } from "react-router-dom";
 
 function AllMyDogs() {
   const [dogImages, setDogImages] = useState<string[]>([]);
@@ -34,12 +35,17 @@ function AllMyDogs() {
   }, []);
 
   return (
-    <div>
-      <h1>My Dogs</h1>
-      {dogImages.map((image, index) => (
-        <img className="my-dog" key={index} src={image} alt="My Dog" />
-      ))}
-    </div>
+    <>
+      <div>
+        <h1>My Dogs</h1>
+        {dogImages.map((image, index) => (
+          <img className="my-dog" key={index} src={image} alt="My Dog" />
+        ))}
+      </div>
+      <Link to="/get-new-dog">
+        <button>Back to Home</button>
+      </Link>
+    </>
   );
 }
 
