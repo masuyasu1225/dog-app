@@ -14,6 +14,7 @@ function GetNewDog() {
   const [timer, setTimer] = useState(10);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const maxFeed: number = 20;
+  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
     // ユーザーのログイン状態の変更を監視
@@ -25,10 +26,14 @@ function GetNewDog() {
   }, []);
 
   const fetchDogImage = () => {
+    setFadeIn(false); // 画像取得前にフェードインをオフにする
+
     fetch("https://dog.ceo/api/breeds/image/random")
       .then((response) => response.json())
       .then((data: DogResponse) => {
         setDogImage(data.message);
+        setFadeIn(true); // 画像取得後にフェードインをオンにする
+
         if (feed > 0) {
           setFeed(feed - 1);
         }
@@ -76,7 +81,11 @@ function GetNewDog() {
   return (
     <div>
       <h1>Random Dog Image</h1>
-      <img className="dog-image" src={dogImage} alt="A random dog" />
+      <img
+        className={`dog-image ${fadeIn ? "fade-in" : ""}`}
+        src={dogImage}
+        alt="A random dog"
+      />{" "}
       <p>
         Feed: {feed}/{maxFeed}
       </p>

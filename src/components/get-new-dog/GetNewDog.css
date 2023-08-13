@@ -11,3 +11,16 @@
   height: 350px;
   object-fit: contain; /* 画像がつぶれないようにアスペクト比を保持 */
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s forwards;
+}
