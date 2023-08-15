@@ -52,6 +52,7 @@ function GetNewDog() {
       .catch((error) => console.log("Error:", error));
   };
 
+  //10秒ごとにfeedを増やす
   useEffect(() => {
     const timerId = setInterval(() => {
       setFeed((prevFeed) => (prevFeed < 20 ? prevFeed + 1 : prevFeed));
@@ -66,13 +67,15 @@ function GetNewDog() {
   // 1秒ごとにtimerを減らす
   useEffect(() => {
     const countdownId = setInterval(() => {
-      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      if (feed < maxFeed) {
+        setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      }
     }, 1000);
 
     return () => {
       clearInterval(countdownId);
     };
-  }, []);
+  }, [feed]);
 
   if (dogImage === null) {
     return <div>Loading...</div>;
