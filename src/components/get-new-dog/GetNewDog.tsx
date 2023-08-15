@@ -85,7 +85,7 @@ function GetNewDog() {
         className={`dog-image ${fadeIn ? "fade-in" : ""}`}
         src={dogImage}
         alt="A random dog"
-      />{" "}
+      />
       <p>
         Feed: {feed}/{maxFeed}
       </p>
