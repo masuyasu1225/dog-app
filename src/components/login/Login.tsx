@@ -16,7 +16,12 @@ function Login() {
       });
   };
 
-  return <button onClick={handleLogin}>Login with Google</button>;
+  return (
+    <>
+      <h1>Dog Gacha</h1>
+      <button onClick={handleLogin}>Login with Google</button>
+    </>
+  );
 }
 
 export default Login;
