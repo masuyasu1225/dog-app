@@ -9,12 +9,14 @@ import { Link } from "react-router-dom";
 import doghouse from "../picture/doghouse.png"; // 画像をimport
 
 function GetNewDog() {
-  const [dogImage, setDogImage] = useState<string | null>(doghouse);
-  const [feed, setFeed] = useState(20);
-  const [timer, setTimer] = useState(10);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const maxFeed: number = 20;
   const maxTimer: number = 10;
+  const initialFeed = Number(localStorage.getItem("feed") || maxFeed);
+  const initialTimer = Number(localStorage.getItem("timer") || maxTimer);
+  const [dogImage, setDogImage] = useState<string | null>(doghouse);
+  const [feed, setFeed] = useState(initialFeed);
+  const [timer, setTimer] = useState(initialTimer);
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
@@ -54,7 +56,6 @@ function GetNewDog() {
   };
 
   useEffect(() => {
-    // 1秒ごとにtimerを減少させ、timerが0になるとFeedが1増加
     const timerDecreaseId = setInterval(() => {
       if (feed < maxFeed) {
         setTimer((prevTimer) => {
@@ -68,10 +69,24 @@ function GetNewDog() {
       }
     }, 1000);
 
+    localStorage.setItem("feed", String(feed));
+
     return () => {
       clearInterval(timerDecreaseId);
     };
-  }, [feed, timer]);
+  }, [feed]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem("timer", String(timer));
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [timer]);
 
   if (dogImage === null) {
     return <div>Loading...</div>;
