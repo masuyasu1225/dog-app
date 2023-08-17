@@ -14,13 +14,36 @@ function GetNewDog() {
   const maxTimer: number = 10;
   const initialFeed = Number(localStorage.getItem("feed") || maxFeed);
   const initialTimer = Number(localStorage.getItem("timer") || maxTimer);
-  const [dogImage, setDogImage] = useState<string | null>(doghouse);
-  const [feed, setFeed] = useState(initialFeed);
-  const [timer, setTimer] = useState(initialTimer);
+  const lastUpdateTime = Number(
+    localStorage.getItem("lastUpdateTime") || Date.now()
+  );
   const [fadeIn, setFadeIn] = useState(false);
 
+  // 現在の時刻と最後の更新時間との差（秒単位）
+  const elapsedSeconds = Math.floor((Date.now() - lastUpdateTime) / 1000);
+
+  let updatedFeed = initialFeed;
+  let updatedTimer = initialTimer - elapsedSeconds;
+
+  while (updatedTimer <= 0) {
+    if (updatedFeed < maxFeed) {
+      updatedFeed += 1;
+      updatedTimer += maxTimer;
+    } else {
+      updatedTimer = 0;
+      break;
+    }
+  }
+
+  const [dogImage, setDogImage] = useState<string | null>(doghouse);
+  const [feed, setFeed] = useState(updatedFeed);
+  const [timer, setTimer] = useState(Math.max(0, updatedTimer));
+
   useEffect(() => {
-    // ユーザーのログイン状態の変更を監視
+    localStorage.setItem("lastUpdateTime", String(Date.now()));
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
@@ -29,19 +52,18 @@ function GetNewDog() {
   }, []);
 
   const fetchDogImage = () => {
-    setFadeIn(false); // 画像取得前にフェードインをオフにする
+    setFadeIn(false);
 
     fetch("https://dog.ceo/api/breeds/image/random")
       .then((response) => response.json())
       .then((data: DogResponse) => {
         setDogImage(data.message);
-        setFadeIn(true); // 画像取得後にフェードインをオンにする
+        setFadeIn(true);
 
         if (feed > 0) {
           setFeed(feed - 1);
         }
 
-        // ユーザーがログインしている場合のみ、画像のURLをFirestoreに保存
         if (currentUser) {
           const usersCollection = collection(db, "users");
           const userDoc = doc(usersCollection, currentUser.uid);
@@ -59,11 +81,11 @@ function GetNewDog() {
     const timerDecreaseId = setInterval(() => {
       if (feed < maxFeed) {
         setTimer((prevTimer) => {
-          if (prevTimer === 0) {
+          if (prevTimer <= 0) {
             setFeed((prevFeed) => prevFeed + 1);
             return maxTimer;
           } else {
-            return prevTimer - 1;
+            return Math.max(0, prevTimer - 1);
           }
         });
       }
@@ -77,15 +99,7 @@ function GetNewDog() {
   }, [feed]);
 
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      localStorage.setItem("timer", String(timer));
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
+    localStorage.setItem("timer", String(Math.floor(timer)));
   }, [timer]);
 
   if (dogImage === null) {
@@ -103,7 +117,7 @@ function GetNewDog() {
       <p>
         Feed: {feed}/{maxFeed}
       </p>
-      {feed < 20 && <p>Timer: {timer} Seconds</p>}
+      {feed < 20 && <p>Timer: {Math.floor(timer)} Seconds</p>}
       <button onClick={fetchDogImage} disabled={feed <= 0}>
         Get New Dog
       </button>
