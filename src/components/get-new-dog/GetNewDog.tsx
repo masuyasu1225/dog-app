@@ -31,6 +31,7 @@ const GetNewDog: React.FC = () => {
     Number(localStorage.getItem("timer") || MAX_TIMER)
   );
 
+  //犬の画像をFirestoreへ保存
   const saveToFirestore = (imageUrl: string) => {
     if (currentUser) {
       const usersCollection = collection(db, "users");
@@ -43,6 +44,7 @@ const GetNewDog: React.FC = () => {
     }
   };
 
+  //犬の画像を出力
   const fetchDogImage = () => {
     setFadeIn(false);
     fetch("https://dog.ceo/api/breeds/image/random")
@@ -58,6 +60,7 @@ const GetNewDog: React.FC = () => {
       .catch((error) => console.log("Error:", error));
   };
 
+  //Firebaseの認証状態を監視
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -65,6 +68,7 @@ const GetNewDog: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  // 最新のFeedとTimerを反映
   useEffect(() => {
     const currentTimestamp = Date.now();
     const lastTimestamp = Number(
@@ -85,6 +89,7 @@ const GetNewDog: React.FC = () => {
     setLastUpdateTime(currentTimestamp);
   }, []);
 
+  //別タブを開いているときの処理
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
@@ -115,6 +120,7 @@ const GetNewDog: React.FC = () => {
     };
   }, [feed, timer, lastUpdateTime]);
 
+  //タブを閉じているときの処理
   useEffect(() => {
     const handleBeforeUnload = () => {
       const currentTimestamp = Date.now();
@@ -128,12 +134,14 @@ const GetNewDog: React.FC = () => {
     };
   }, []);
 
+  //最新のFeedとTimerをlocalStorageに保存
   useEffect(() => {
     setLastUpdateTime(Date.now());
     localStorage.setItem("feed", String(feed));
     localStorage.setItem("timer", String(timer));
   }, [feed, timer]);
 
+  //FeedとTimerの計算処理
   useEffect(() => {
     const timerDecreaseId = setInterval(() => {
       if (feed < MAX_FEED) {
