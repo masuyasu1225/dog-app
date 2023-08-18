@@ -15,7 +15,7 @@ import {
 import DogImage from "./DogImage";
 
 const MAX_FEED = 20;
-const MAX_TIMER = 10;
+const MAX_TIMER = 30;
 
 const GetNewDog: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
