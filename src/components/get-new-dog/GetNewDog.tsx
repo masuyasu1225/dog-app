@@ -152,7 +152,9 @@ const GetNewDog: React.FC = () => {
     <div>
       <h1>Random Dog Image</h1>
       {dogImage && <DogImage src={dogImage} fadeIn={fadeIn} />}
-      <p>Feed: {feed}/20</p>
+      <p>
+        Feed: {feed}/{MAX_FEED}
+      </p>
       {feed < MAX_FEED && <p>Timer: {timer} Seconds</p>}
       <button onClick={fetchDogImage} disabled={feed <= 0}>
         Get New Dog
