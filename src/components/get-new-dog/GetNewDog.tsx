@@ -54,6 +54,9 @@ const GetNewDog: React.FC = () => {
         setFadeIn(true);
         if (feed > 0) {
           setFeed(feed - 1);
+          if (feed === MAX_FEED) {
+            setTimer(MAX_TIMER);
+          }
         }
         saveToFirestore(data.message);
       })
