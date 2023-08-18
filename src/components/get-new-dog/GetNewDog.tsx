@@ -66,6 +66,26 @@ const GetNewDog: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const currentTimestamp = Date.now();
+    const lastTimestamp = Number(
+      localStorage.getItem("lastUpdateTime") || currentTimestamp
+    );
+
+    const elapsedSeconds = calculateElapsedTimeInSeconds(lastTimestamp);
+    const { updatedFeed, updatedTimer } = updateFeedAndTimer(
+      feed,
+      timer,
+      elapsedSeconds,
+      MAX_FEED,
+      MAX_TIMER
+    );
+
+    setFeed(updatedFeed);
+    setTimer(updatedTimer);
+    setLastUpdateTime(currentTimestamp);
+  }, []);
+
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         const currentTimestamp = Date.now();
@@ -82,6 +102,10 @@ const GetNewDog: React.FC = () => {
         setFeed(updatedFeed);
         setTimer(updatedTimer);
         setLastUpdateTime(currentTimestamp);
+      } else {
+        const currentTimestamp = Date.now();
+        setLastUpdateTime(currentTimestamp);
+        localStorage.setItem("lastUpdateTime", String(currentTimestamp));
       }
     };
 
@@ -93,8 +117,11 @@ const GetNewDog: React.FC = () => {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      localStorage.setItem("lastUpdateTime", String(Date.now()));
+      const currentTimestamp = Date.now();
+      localStorage.setItem("lastUpdateTime", String(currentTimestamp));
+      setLastUpdateTime(currentTimestamp);
     };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
