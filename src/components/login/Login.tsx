@@ -6,7 +6,7 @@ function Login() {
 
   const handleLogin = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(() => {
         // ログイン成功
         navigate("/get-new-dog"); // ここでリダイレクトを行います
       })
